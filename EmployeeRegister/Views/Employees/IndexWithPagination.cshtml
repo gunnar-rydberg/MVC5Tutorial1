@@ -1,0 +1,71 @@
+﻿@model IEnumerable<EmployeeRegister.Models.Employee>
+
+@{
+    ViewBag.Title = "Register With Pagination";
+}
+
+<h2>Register with Pagination</h2>
+
+@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary", role = "button" })
+
+<div class="dropdown div-inline">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        @ViewBag.DropDownBox.Title
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        @foreach (var item in ViewBag.DropDownBox.Item)
+        {
+            <li><a href="@Url.Action("IndexWithPagination", new { page = ViewBag.pagingInfo.CurrentPage, sortOrder = item.ModelName })">@item.DisplayName</a></li>
+        }
+    </ul>
+</div>
+
+<p> </p>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-sm-4 extra-margin-bottom">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <p>
+                            <b>@Html.DisplayNameFor(model => model.FirstName): </b>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </p>
+                        <p>
+                            <b>@Html.DisplayNameFor(model => model.LastName): </b>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </p>
+                        <p>
+                            <b>@Html.DisplayNameFor(model => model.Salary): </b>
+                            @Html.DisplayFor(modelItem => item.Salary)
+                        </p>
+                        <p>
+                            <b>@Html.DisplayNameFor(model => model.Position): </b>
+                            @Html.DisplayFor(modelItem => item.Position)
+                        </p>
+                        <p>
+                            <b>@Html.DisplayNameFor(model => model.Department): </b>
+                            @Html.DisplayFor(modelItem => item.Department)
+                        </p>
+                        <div>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default", role = "button" })
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary", role = "button" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default", role = "button" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Pagination -->
+<nav>
+    <ul class="pagination">
+        @*NOTE! Have to make explicit cast to PagingInfo or else compiler can't acceppt the extensino method*@
+        @Html.PageLinks((EmployeeRegister.Util.PagingInfo)ViewBag.pagingInfo, x => Url.Action("IndexWithPagination", new { page = x, sortOrder = ViewBag.sortOrderCurrent }))
+    </ul>
+</nav>
